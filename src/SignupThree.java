@@ -1,14 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
-
-public class SignupThree extends JFrame{
+public class SignupThree extends JFrame implements ActionListener {
 
     JRadioButton r1, r2, r3, r4;
     JCheckBox c1, c2, c3,c4 ,c5, c6, c7;
     JButton submit, cancel;
+    String formno;
 
-    SignupThree(){
+    SignupThree(String formno){
+        this.formno = formno;
 
         setLayout(null);
 
@@ -126,15 +129,87 @@ public class SignupThree extends JFrame{
         c7 = new JCheckBox("I Hereby declares that above entered details are correct to the best of my knowledge");
         c7.setBackground(Color.WHITE);
         c7.setFont(new Font("Raleway", Font.BOLD, 12));
-        c7.setBounds(100, 680, 600, 30);
+        c7.setBounds(100, 630, 600, 30);
         add(c7);
+
+        submit = new JButton("Submit");
+        submit.setBackground(Color.BLACK);
+        submit.setForeground(Color.WHITE);
+        submit.setFont(new Font("Raleway", Font.BOLD, 14));
+        submit.setBounds(250, 660, 100, 30);
+        submit.addActionListener(this);
+        add(submit);
+
+        cancel = new JButton("Cancel");
+        cancel.setBackground(Color.BLACK);
+        cancel.setForeground(Color.WHITE);
+        cancel.setFont(new Font("Raleway", Font.BOLD, 14));
+        cancel.setBounds(420, 660, 100, 30);
+        cancel.addActionListener(this);
+        add(cancel);
+
+        getContentPane().setBackground(Color.WHITE);
 
         setSize(850, 820);
         setLocation(350, 0);
         setVisible(true);
     }
 
+    public void actionPerformed(ActionEvent ae){
+        if (ae.getSource() == submit){
+            String accountType = null;
+            if (r1.isSelected()){
+                accountType = "Saving Account";
+            } else if (r2.isSelected()){
+                accountType = "Fixed Deposit Account";
+            } else if (r3.isSelected()){
+                accountType = "current Account";
+            } else if (r4.isSelected()){
+                accountType = "Reccuring Deposit Account";
+            }
+
+            Random random = new Random();
+            String cardnumber = "" + Math.abs((random.nextLong() % 90000000L) + 5040936000000000L);
+
+            String pinnumber = "" + Math.abs((random.nextLong() % 9000L) + 1000L);
+
+            String facility = "";
+
+            if (c1.isSelected()){
+                facility = facility + " ATM Card";
+            }else if (c2.isSelected()){
+                facility = facility + " Internet Banking";
+            }else if (c3.isSelected()){
+                facility = facility + " Mobile Banking";
+            }else if (c4.isSelected()){
+                facility = facility + " Email & SMS Alerts";
+            }else if (c5.isSelected()){
+                facility = facility + " Cheque Book";
+            }else if (c6.isSelected()){
+                facility = facility + "E-Statement";
+            }
+
+            try {
+                if (accountType.equals("")){
+                    JOptionPane.showMessageDialog(null, "Account Type is Required");
+                } else {
+                    Conn conn = new Conn();
+                    String query1 = "Insert into signupthree values('"+formno+"', '"+accountType+"', '"+cardnumber+"', '"+pinnumber+"', '"+facility+"')";
+                    String query2 = "Insert into login values('"+formno+"', '"+cardnumber+"', '"+pinnumber+"')";
+                    conn.s.executeUpdate(query1);
+                    conn.s.executeUpdate(query2);
+
+                    JOptionPane.showMessageDialog(null, "Card Number: " + cardnumber + "\n Pin: " + pinnumber);
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } else if (ae.getSource() == cancel){
+
+        }
+    }
+
     public static void main(String[] args) {
-        new SignupThree();
+        new SignupThree("");
     }
 }
