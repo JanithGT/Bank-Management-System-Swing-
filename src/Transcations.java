@@ -13,8 +13,15 @@ public class Transcations  extends JFrame{
         image.setBounds(0,0, 600, 600);
         add(image);
 
+        JLabel text = new JLabel("Please select your Transaction");
+        text.setBounds(110, 200, 400, 35);
+        text.setForeground(Color.WHITE);
+        text.setFont(new Font("System", Font.BOLD, 14));
+        image.add(text);
+
         setSize(600, 600);
-        setLocation(300, 0);
+        setLocation(300, 100);
+        setUndecorated(true);
         setVisible(true);
     }
 
