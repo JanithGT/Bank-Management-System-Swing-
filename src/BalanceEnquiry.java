@@ -39,6 +39,11 @@ public class BalanceEnquiry extends JFrame implements ActionListener {
             System.out.println(e);
         }
 
+        JLabel text = new JLabel("Your Current Balance is " + balance);
+        text.setForeground(Color.WHITE);
+        text.setBounds(120, 250, 300, 30);
+        image.add(text);
+
         setSize(600, 600);
         setLocation(300, 100);
         setUndecorated(true);
