@@ -4,10 +4,12 @@ import java.awt.event.*;
 
 public class PinChange extends JFrame implements ActionListener {
 
-    JTextField pin, repin;
+    JPasswordField pin, repin;
     JButton change, back;
+    String pinnumber;
 
-    PinChange(String pinchange){
+    PinChange(String pinnumber){
+        this.pinnumber = pinnumber;
         setLayout(null);
         ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/atm.jpg"));
         Image i2 = i1.getImage().getScaledInstance(600, 600, Image.SCALE_DEFAULT);
@@ -28,7 +30,7 @@ public class PinChange extends JFrame implements ActionListener {
         pintext.setBounds(110, 240, 200, 35);
         image.add(pintext);
 
-        pin = new JTextField();
+        pin = new JPasswordField();
         pin.setFont(new Font("Raleway", Font.BOLD, 16));
         pin.setBounds(220, 240, 100, 20);
         image.add(pin);
@@ -39,7 +41,7 @@ public class PinChange extends JFrame implements ActionListener {
         repintext.setBounds(110, 280, 200, 35);
         image.add(repintext);
 
-        repin = new JTextField();
+        repin = new JPasswordField();
         repin.setFont(new Font("Raleway", Font.BOLD, 16));
         repin.setBounds(220, 280, 100, 20);
         image.add(repin);
@@ -81,6 +83,19 @@ public class PinChange extends JFrame implements ActionListener {
                 }
 
                 Conn conn = new Conn();
+                String query1 = "update bank set pin = '"+rpin+"' where pin = '"+pinnumber+"'";
+                String query2 = "update login set pin = '"+rpin+"' where pin = '"+pinnumber+"'";
+                String query3 = "update signupthree set pin = '"+rpin+"' where pin = '"+pinnumber+"'";
+
+                conn.s.executeUpdate(query1);
+                conn.s.executeUpdate(query2);
+                conn.s.executeUpdate(query3);
+
+                JOptionPane.showMessageDialog(null,"Pin changed successfully");
+
+                setVisible(false);
+                new Transcations(rpin).setVisible(true);
+
             } catch(Exception e){
                 System.out.println(e);
             }
